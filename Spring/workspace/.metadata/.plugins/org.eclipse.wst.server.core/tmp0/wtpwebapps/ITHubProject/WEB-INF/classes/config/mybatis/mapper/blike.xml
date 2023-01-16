@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="blike"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="blike">
+		insert into blike values(blike_seq.nextval,#{boardSeq},#{mSeq},null)
+	</insert>
+	
+	<delete id="delete" parameterType="blike">
+		delete from blike where boardSeq=#{boardSeq} and mSeq=#{mSeq}
+	</delete>
+	
+	<select id="myLike" parameterType="int" resultType="blike">
+		select * from blike where mSeq=#{mSeq}
+	</select>
+	
+	<select id="myLikeBoard" parameterType="int" resultType="int">
+		select boardSeq from blike where mSeq=#{mSeq}
+	</select>
+	
+</mapper>

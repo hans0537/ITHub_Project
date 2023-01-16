@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memfollow"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+
+	<insert id="memFollow" parameterType="memfollow">
+		insert into memfollow values(mf_seq.NEXTVAL, #{followSeq}, #{followerSeq}, sysdate)
+	</insert>
+
+	<select id="followCnt" parameterType="int" resultType="int">
+		select count(*) from memfollow where followSeq=#{mSeq}
+	</select>
+
+	<select id="followerCnt" parameterType="int" resultType="int">
+		select count(*) from memfollow where followerSeq=#{mSeq}
+	</select>
+
+	<select id="myselect" parameterType="int" resultType="int">
+		select followerSeq from memfollow where followSeq=#{mSeq}
+	</select>
+	
+	<delete id="unfollow" parameterType="memfollow">
+		delete from memfollow where followSeq=#{followSeq} and followerSeq=#{followerSeq}
+	</delete>
+	
+	<select id="followList" parameterType="int" resultType="member">
+		select 
+        		* 
+		from 	
+				member m
+		where 
+        		m.mSeq In (select B.followerSeq from memfollow b where b.followSeq=#{mSeq})
+	</select>
+
+	<select id="followerList" parameterType="int" resultType="member">
+		select 
+        		* 
+		from 	
+				member m
+		where 
+        		m.mSeq In (select B.followSeq from memfollow b where b.followerSeq=#{mSeq})
+	</select>
+
+	<select id="pfollowList" parameterType="int" resultType="page">
+		select 
+		        * 
+		from 
+		        page p
+		where 
+		        p.pSeq In (select B.followerpSeq from pagefollow b where b.followmSeq=#{mSeq})
+	</select>
+	
+	<select id="pfollowerList" parameterType="int" resultType="member">
+		select 
+        		* 
+		from 	
+				member m
+		where 
+        		m.mSeq In (select B.followmSeq from pagefollow b where b.followerpSeq=#{pSeq})
+	</select>
+
+</mapper>	

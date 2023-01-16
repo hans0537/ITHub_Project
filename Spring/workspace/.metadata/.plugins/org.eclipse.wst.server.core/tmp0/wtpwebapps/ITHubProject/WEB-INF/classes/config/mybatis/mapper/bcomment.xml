@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bcomment"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="bcomment">
+		insert into bcomment values(bc_seq.nextval,#{boardSeq},#{mSeq},null,#{bcContent},sysdate,#{groupno},#{orderno},#{depthno})
+	</insert>
+	
+	<select id="selectAll" resultType="bcomment">
+		select bc.*, m.mFirstname, m.mLastname, m.mPic from bcomment bc, member m where bc.mSeq = m.mSeq order by bc.groupno asc, bc.orderno desc
+	</select>
+	
+	<select id="selectGroup" parameterType="int" resultType="bcomment">
+		select bc.*, m.mFirstname, m.mLastname, m.mPic from bcomment bc, member m where bc.mSeq = m.mSeq and bc.groupno=#{groupno} order by bc.orderno desc
+	</select>
+	
+	<select id="selectDepth" parameterType="int" resultType="bcomment">
+		select * from bcomment where groupno=#{groupno} and depthno=2
+	</select>
+	
+	<select id="selectOne" parameterType="map" resultType="bcomment">
+		select * from bcomment where groupno=#{groupno} and orderno=#{orderno} and depthno=#{depthno}
+	</select>
+	
+	<update id="updateOrderno" parameterType="bcomment">
+		update bcomment set orderno=orderno+1 where groupno=#{groupno} and orderno >= #{orderno}
+	</update>
+</mapper>

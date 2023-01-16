@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mtomhit"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="mtomhit">
+		insert into mtomhit values(mtmhit_seq.nextval, #{mhitSeq}, #{mSeq}, sysdate)
+	</insert>
+	
+	<select id="hitCheck" parameterType="mtomhit" resultType="int">
+		select NVL(mtmhitseq,0) from mtomhit RIGHT OUTER JOIN DUAL ON mhitseq = #{mhitSeq} and mseq = #{mSeq}
+	</select>
+	
+	<delete id="delete" parameterType="mtomhit">
+		delete from mtomhit where mhitSeq=#{mhitSeq} and mSeq=#{mSeq}
+	</delete>
+	
+	<select id="hitSelect" parameterType="int" resultType="mtomhit">
+		select * from mtomhit where mhitSeq=#{mhitSeq} order by mtmhitSeq desc
+	</select>
+
+</mapper>

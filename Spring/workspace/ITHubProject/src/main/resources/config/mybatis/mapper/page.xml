@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="page"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="page">
+		<choose>
+			<when test="pType == 0">
+				insert into page(pSeq, mSeq, pType, pName, pPic, pInfo, pEmpcnt, pLink, iSeq, ptypeSeq) 
+				values (p_seq.nextval, #{mSeq}, #{pType}, #{pName}, #{pPic, jdbcType=VARCHAR}, #{pInfo}, #{pEmpcnt}, #{pLink}, #{iSeq}, #{ptypeSeq})
+			</when>
+			<otherwise>
+				insert into page(pSeq, mSeq, pType, pName, pPic, pInfo, pEmpcnt, pLink, iSeq) 
+				values (p_seq.nextval, #{mSeq}, #{pType}, #{pName}, #{pPic, jdbcType=VARCHAR}, #{pInfo}, #{pEmpcnt}, #{pLink}, #{iSeq})
+			</otherwise>
+		</choose>
+	</insert>
+	
+	<select id="getPage" parameterType="int" resultType="page">
+		select * from page where mSeq=#{mSeq}
+	</select>
+	
+	<select id="selectOne" parameterType="int" resultType="page">
+		select * from page where pSeq=#{pSeq}
+	</select>
+
+	<select id="selectOne1" parameterType="page" resultType="page">
+		select * from page where pType=#{pType} and pName=#{pName} and pInfo=#{pInfo} and pLink=#{pLink}
+	</select>
+	
+	<select id="pTypeList" parameterType="Map" resultType="page">
+		select * from page where pType=#{pType} and mSeq!=#{mSeq}
+	</select>
+	
+	<select id="pTypeAll" parameterType="int" resultType="page">
+		select * from page where pType=#{pType}
+	</select>
+	
+	<update id="updateText" parameterType="page">
+		update page set pText=#{pText} where pSeq=#{pSeq}
+	</update>
+ 
+	<update id="updateFound" parameterType="page">
+		update page set pFounddate=#{pFounddate} where pSeq=#{pSeq}
+	</update>
+	
+	<update id="updateEmpcnt" parameterType="page">
+		update page set pEmpcnt=#{pEmpcnt} where pSeq=#{pSeq}
+	</update>
+	
+	<update id="updateAddr" parameterType="page">
+		update page set pAddr=#{pAddr},cSeq=#{cSeq},ciSeq=#{ciSeq} where pSeq=#{pSeq}
+	</update>
+
+	<update id="pPicUpdate" parameterType="page">
+		update page set pPic=#{pPic,jdbcType=CHAR} where pSeq=#{pSeq}
+	</update>
+
+	<update id="pBackpicUpdate" parameterType="page">
+		update page set pBackpic=#{pBackpic,jdbcType=CHAR} where pSeq=#{pSeq}
+	</update>
+	
+	<update id="update" parameterType="page">
+		update page
+		<set>
+			<if test="pName !='' and pName != null">
+				pName=#{pName},
+			</if>
+			<if test="pPic !='' and pPic != null">
+				pPic=#{pPic},
+			</if>
+			<if test="pBackpic !='' and pBackpic != null">
+				pBackpic=#{pBackpic},
+			</if>
+			<if test="pInfo !='' and pInfo != null">
+				pInfo=#{pInfo},
+			</if>
+			<if test="pEmpcnt !='' and pEmpcnt != null">
+				pEmpcnt=#{pEmpcnt},
+			</if>
+			<if test="pText !='' and pText != null">
+				pText=#{pText},
+			</if>
+			<if test="pLink !='' and pLink != null">
+				pLink=#{pLink},
+			</if>
+			<if test="pFounddate != null">
+				pFounddate=#{pFounddate},
+			</if>
+			<if test="pTel !='' and pTel != null">
+				pTel=#{pTel},
+			</if>
+			<if test="pAddr !='' and pAddr != null">
+				pAddr=#{pAddr},
+			</if>
+			<if test="pPostcode !='' and pPostcode != null">
+				pPostcode=#{pPostcode},
+			</if>
+			<if test="iSeq !='' and iSeq != null">
+				iSeq=#{iSeq},
+			</if>
+			<if test="ptypeSeq !='' and ptypeSeq != null">
+				ptypeSeq=#{ptypeSeq},
+			</if>
+			<if test="cSeq !='' and cSeq != null">
+				cSeq=#{cSeq},
+			</if>
+			<if test="ciSeq !='' and ciSeq != null">
+				ciSeq=#{ciSeq},
+			</if>
+		</set>
+		where pSeq=#{pSeq}
+		
+	</update>
+	
+</mapper>

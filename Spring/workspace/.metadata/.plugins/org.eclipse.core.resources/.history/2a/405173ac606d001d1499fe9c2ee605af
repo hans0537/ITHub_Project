@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="member">
+		insert into member values(m_seq.nextval, #{mEmail,jdbcType=VARCHAR}, #{mPw,jdbcType=VARCHAR}, #{mFirstname,jdbcType=VARCHAR}, #{mLastname,jdbcType=VARCHAR}, #{mHp,jdbcType=VARCHAR}, #{mIntro,jdbcType=VARCHAR}, #{mPic,jdbcType=VARCHAR}, #{mBackpic,jdbcType=VARCHAR}, #{mOpen,jdbcType=VARCHAR}, #{mLink,jdbcType=VARCHAR}, #{mHashtag,jdbcType=VARCHAR}, 1, 1)
+	</insert>
+
+	<select id="selectOne" parameterType="int" resultType="member">
+		select * from member where mSeq=#{mSeq}
+	</select>
+
+	<select id="getmEmail" parameterType="int" resultType="String">
+		select mEmail from member where mSeq=#{mSeq}
+	</select>
+	
+	<select id="checkLogin" resultType = "int" parameterType="member">
+		select mSeq from member where mEmail = #{mEmail} and mPw = #{mPw} 
+	</select>
+	
+	<select id = "getName" resultType = "String" parameterType = "int">
+		select mFirstname and mLastname from member where mSeq = #{mSeq}
+	</select>
+	
+	<select id = "getId" resultType = "String" parameterType="int">
+		select mEmail from member where mSeq = #{mSeq}
+	</select>
+	
+	<select id="getAll" parameterType="int" resultType="member">
+		select * from member where mSeq = #{mSeq}
+	</select>
+	
+	<update id="update" parameterType="member">
+		update member set mEmail = #{mEmail},mFirstname = #{mFirstname},mLastname = #{mLastname},mHp=#{mHp},mIntro=#{mIntro},mPic=#{mPic},mBackpic = # {mBackpic}
+	</update>
+	
+	<select id="findEmail" parameterType="member" resultType="String">
+		select mEmail from member where mFirstname=#{mFirstname} and mLastname=#{mLastname} and mHp=#{mHp}
+	</select>
+	
+	<select id="findPw" parameterType="member" resultType="String">
+		select mPw from member where mEmail=#{mEmail} and mFirstname=#{mFirstname} and mLastname=#{mLastname} and mHp=#{mHp}
+	</select>
+
+	<update id="backPicUpdate" parameterType="member">
+		update member set mBackpic=#{mBackpic} where mSeq=#{mSeq}
+	</update>
+</mapper>

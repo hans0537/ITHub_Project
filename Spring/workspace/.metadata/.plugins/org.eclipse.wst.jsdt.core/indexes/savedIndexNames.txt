@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+/Users/DevRoot/Dropbox/ITHub Project/Spring/workspace/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+2024997837.index
+639806337.index
+392223732.index
+2139572016.index
+166257195.index
+562589351.index

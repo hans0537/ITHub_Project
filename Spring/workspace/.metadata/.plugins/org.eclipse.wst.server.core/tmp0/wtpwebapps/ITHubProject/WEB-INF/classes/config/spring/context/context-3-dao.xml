@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<bean id="adminDAO" class="com.ithub.admin.AdminDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+			
+<!-- 	<bean id="adminDeptDAO" class="com.ithub.admindept.AdminDeptDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean> -->
+			
+	<bean id="memberDAO" class="com.ithub.member.MemberDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="countryDAO" class="com.ithub.country.CountryDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="industryDAO" class="com.ithub.industry.IndustryDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="pagetypeDAO" class="com.ithub.pagetype.PagetypeDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="pageDAO" class="com.ithub.page.PageDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="memFollowDAO" class="com.ithub.memfollow.MemFollowDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="pageFollowDAO" class="com.ithub.pagefollow.PageFollowDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="jobPostDAO" class="com.ithub.jobpost.JobPostDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="empTypeDAO" class="com.ithub.emptype.EmpTypeDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="workTypeDAO" class="com.ithub.worktype.WorkTypeDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="occupationDAO" class="com.ithub.occupation.OccupationDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="positionDAO" class="com.ithub.position.PositionDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="jobRankDAO" class="com.ithub.jobrank.JobRankDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="mtomhitDAO" class="com.ithub.mtomhit.MtomhitDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="ptomhitDAO" class="com.ithub.ptomhit.PtomhitDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="boardDAO" class="com.ithub.board.BoardDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="jpostSaveDAO" class="com.ithub.jpostsave.JpostSaveDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="serviceCenterDAO" class="com.ithub.servicecenter.ServiceCenterDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="serviceCategoryDAO" class="com.ithub.servicecategory.ServiceCategoryDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="topicDAO" class="com.ithub.topic.TopicDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="qnapicDAO" class="com.ithub.qnapic.QnapicDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="memberqnaDAO" class="com.ithub.memberqna.MemberqnaDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="qnaanswerDAO" class="com.ithub.qnaanswer.QnaanswerDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="bcommentDAO" class="com.ithub.bcomment.BcommentDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="blikeDAO" class="com.ithub.blike.BlikeDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+	
+	<bean id="careerDAO" class="com.ithub.career.CareerDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+
+	<bean id="educationDAO" class="com.ithub.education.EducationDAO">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
+</beans>

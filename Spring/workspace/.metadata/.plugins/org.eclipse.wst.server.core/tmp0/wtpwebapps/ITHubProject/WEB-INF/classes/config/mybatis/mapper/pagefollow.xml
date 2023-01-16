@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pagefollow"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+
+	<insert id="pageFollow" parameterType="pagefollow">
+		insert into pagefollow values(pf_seq.NEXTVAL, #{followmSeq}, #{followerpSeq}, sysdate)
+	</insert>
+
+	<select id="followCnt" parameterType="int" resultType="int">
+		select count(*) from pagefollow where followmSeq=#{mSeq}
+	</select>
+
+	<select id="followerCnt" parameterType="int" resultType="int">
+		select count(*) from pagefollow where followerpSeq=#{pSeq}
+	</select>
+	
+	<select id="selectm" parameterType="int" resultType="int">
+		select pf.followerpSeq from pagefollow pf where pf.followmSeq=#{mSeq} and pf.followerpSeq not in (select p.pSeq from page p where p.mSeq=#{mSeq})
+	</select>
+	
+	<delete id="unfollow" parameterType="pagefollow">
+		delete from pagefollow where followmSeq=#{followmSeq} and followerpSeq=#{followerpSeq}
+	</delete>
+</mapper>	

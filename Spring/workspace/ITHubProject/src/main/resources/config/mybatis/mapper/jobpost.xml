@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jobPost"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+ 	<resultMap type="HashMap" id="map">
+		<result property="jpostSeq" column = "JPOSTSEQ"/>
+		<result property="jpostName" column = "JPOSTNAME"/>
+		<result property="jpostCnt" column = "JPOSTCNT"/>
+		<result property="jpostExplain" column = "JPOSTEXPLAIN" jdbcType = "CLOB" javaType = "java.lang.String"/>
+		<result property="etypeSeq" column = "ETYPESEQ"/>
+		<result property="wtypeSeq" column = "WTYPESEQ"/>
+		<result property="iSeq" column = "ISEQ"/>
+		<result property="occSeq" column = "OCCSEQ"/>
+		<result property="posSeq" column = "POSSEQ"/>
+		<result property="jrankSeq" column = "JRANKSEQ"/>
+		<result property="pSeq" column = "PSEQ"/>
+		<result property="jpostDate" column = "JPOSTDATE"/>
+		<result property="jpostApply" column = "JPOSTAPPLY"/>
+		<result property="hisdate" column = "HISDATE"/>
+		<result property="mSeq" column = "MSEQ"/>
+		<result property="pName" column = "PNAME"/>
+		<result property="pPic" column = "PPIC"/>
+	</resultMap> 
+
+	
+	<select id = "selectPost" resultMap="map">
+		select 
+    		jpostseq, jpostname, 
+    		(select count(*) from jpostsave js where js.jpostSeq = jobpost.jpostSeq) jpostapply
+    		, jpostcnt, jpostexplain, jpostdate, pSeq, mSeq,
+    		(select etypename from emptype where jobpost.etypeseq = emptype.etypeseq) etypeName,
+    		(select iname from industry where jobpost.iseq = industry.iseq) iName,
+    		(select wtypename from worktype where jobpost.wtypeseq = worktype.wtypeseq) wtypeName,
+    		(select occname from occupation where jobpost.occseq = occupation.occseq) occName,
+    		(select posname from position where jobpost.posseq = position.posseq) posName,
+    		(select jrankname from jobrank where jobpost.jrankseq = jobrank.jrankseq) jRankName,
+    		(select ptypename from pagetype where (select ptypeseq from page where jobpost.pseq = page.pseq) = pagetype.ptypeseq) ptypeName,
+			TO_DATE(sysdate, 'YYYY-MM-DD') - TO_DATE(jpostdate, 'YYYY-MM-DD') as hisdate,
+            (select pName from page where jobpost.pSeq = page.pSeq) pName,
+            (select pPic from page where jobpost.pSeq = page.pSeq) pPic
+		from 
+        	jobpost
+	</select>
+	
+	<select id = "mySelectPost" parameterType="int" resultMap="map">
+		select 
+    		jpostseq, jpostname, 
+    		(select count(*) from jpostsave js where js.jpostSeq = jobpost.jpostSeq) jpostapply
+    		, jpostcnt, jpostexplain, jpostdate,
+    		(select etypename from emptype where jobpost.etypeseq = emptype.etypeseq) etypeName,
+    		(select iname from industry where jobpost.iseq = industry.iseq) iName,
+    		(select wtypename from worktype where jobpost.wtypeseq = worktype.wtypeseq) wtypeName,
+    		(select occname from occupation where jobpost.occseq = occupation.occseq) occName,
+    		(select posname from position where jobpost.posseq = position.posseq) posName,
+    		(select jrankname from jobrank where jobpost.jrankseq = jobrank.jrankseq) jRankName,
+    		(select ptypename from pagetype where (select ptypeseq from page where jobpost.pseq = page.pseq) = pagetype.ptypeseq) ptypeName,
+    		TO_DATE(sysdate, 'YYYY-MM-DD') - TO_DATE(jpostdate, 'YYYY-MM-DD') as hisdate
+		from 
+        	jobpost
+        where
+        	jobpost.pSeq = #{pSeq}
+	</select>
+	
+	<select id = "selectOneDetail" parameterType="int" resultType="jobPost">
+		select 
+    		jpostseq, jpostname, jpostapply, jpostcnt, jpostexplain, jpostdate,
+    		(select etypename from emptype where jobpost.etypeseq = emptype.etypeseq) etypeName,
+    		(select iname from industry where jobpost.iseq = industry.iseq) iName,
+    		(select wtypename from worktype where jobpost.wtypeseq = worktype.wtypeseq) wtypeName,
+    		(select occname from occupation where jobpost.occseq = occupation.occseq) occName,
+    		(select posname from position where jobpost.posseq = position.posseq) posName,
+    		(select jrankname from jobrank where jobpost.jrankseq = jobrank.jrankseq) jRankName,
+    		(select ptypename from pagetype where (select ptypeseq from page where jobpost.pseq = page.pseq) = pagetype.ptypeseq) ptypeName,
+    		TO_DATE(sysdate, 'YYYY-MM-DD') - TO_DATE(jpostdate, 'YYYY-MM-DD') as hisdate,
+    		(select pName from page where jobpost.pSeq = page.pSeq) pName,
+            (select pPic from page where jobpost.pSeq = page.pSeq) pPic
+		from 
+        	jobpost
+        where
+        	jobpost.jpostSeq = #{jpostSeq}
+	</select>
+	
+	<insert id="insertPost" parameterType="jobPost">
+		insert into jobpost values(JPOST_SEQ.nextval,#{jpostName},#{jpostCnt},#{jpostExplain,jdbcType=CLOB},#{etypeSeq},#{wtypeSeq},#{iSeq},#{occSeq},#{posSeq},#{jrankSeq},#{pSeq},sysdate,0,#{mSeq})
+	</insert>
+	
+	<update id = "updateCnt">
+		update jobpost set jpostcnt = jpostcnt+1 where jobpostseq = #{jobpostSeq}
+	</update>
+	
+	<select id="selectOne" parameterType="int" resultType="jobPost">
+		select
+            (select pName from page where jobpost.pSeq = page.pSeq) pName,
+           	(select pPic from page where jobpost.pSeq = page.pSeq) pPic,
+            jpostSeq, jpostName, jpostCnt, jpostExplain, etypeSeq, wtypeSeq,
+            iSeq, occSeq, posSeq, jrankSeq, pSeq, jpostDate, jpostApply, mSeq
+		from 
+        		jobpost
+		where
+        		jobpost.jpostSeq = #{jpostSeq}
+	</select>
+	
+	<update id="updatePost" parameterType="jobPost">
+		update jobpost set 
+			jpostname = #{jpostName},
+			jpostexplain = #{jpostExplain},
+			etypeseq = #{etypeSeq},
+			wtypeseq = #{wtypeSeq},
+			iseq = #{iSeq},
+			occseq = #{occSeq},
+			posseq = #{posSeq},
+			jrankseq = #{jrankSeq}
+		where
+			jpostseq = #{jpostSeq}
+			and
+			mSeq = #{mSeq} 
+	</update>
+	
+	
+	<delete id="deletePost" parameterType="jobPost">
+		delete from jobpost
+		where jpostseq = #{jpostSeq}
+		and mSeq = #{mSeq}
+	</delete>
+	
+</mapper>

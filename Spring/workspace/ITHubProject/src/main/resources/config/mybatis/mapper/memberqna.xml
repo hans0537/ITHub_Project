@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberqna"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<resultMap type="HashMap" id="map">
+		<result property="mqnaSeq" column="MQNASEQ"/>
+		<result property="mSeq" column="MSEQ"/>
+		<result property="scSeq" column="SCSEQ"/>
+		<result property="mqnaTitle" column="MQNATITLE"/>
+		<result property="mqnaContent" column="MQNACONTENT"/>
+		<result property="mqnaState" column="MQNASTATE"/>
+		<result property="scTitle" column="SCTITLE"/>
+	</resultMap>
+	
+	
+	<insert id="insert" parameterType="memberqna">
+		insert into memberqna values(mqna_seq.nextval,#{mSeq},#{scSeq},#{mqnaTitle,jdbcType=VARCHAR},#{mqnaContent,jdbcType=CLOB},#{mqnaState})
+	</insert>
+	
+	<select id="mySelect" resultType="memberqna" parameterType="map">
+		select * from (select rownum rn, t.* from (select mq.*, (select scTitle from servicecenter where servicecenter.scSeq = mq.scSeq) scTitle from memberqna mq, member m where mq.mSeq = m.mSeq 
+			<if test="type != null">
+				<choose>	
+					<when test="type == 'boardSeq'">
+						and boardSeq = #{word}
+					</when>
+					<otherwise>
+						and ${type} like '%${word}%' 
+					</otherwise>
+				</choose>
+			</if>
+			) t where t.mSeq = #{mSeq})
+		<![CDATA[
+			where rn >=#{first} and rn <= #{last} 
+		]]> 
+	</select>
+	
+	<select id="select" resultMap="map">
+		select mqnaSeq,mSeq,mqnaTitle,mqnaContent,mqnaState,
+		 	(select scTitle from servicecenter where servicecenter.scSeq = memberqna.scSeq) scTitle
+		 from 
+		 	memberqna
+	</select>
+		
+	
+	<select id="selectOne" parameterType="int" resultType="memberqna">
+		select
+			mqnaSeq,mSeq,mqnaTitle,mqnaContent,mqnaState,
+		 	(select scTitle from servicecenter where servicecenter.scSeq = memberqna.scSeq) scTitle
+		 from 
+		 	memberqna
+		 where
+		 	mqnaSeq = #{mqnaSeq}
+	</select>
+	
+	<update id="update" parameterType="memberqna">
+		update memberqna set
+			scSeq = #{scSeq},
+			mqnaTitle = #{mqnaTitle},
+			mqnaContent = #{mqnaContent}
+		where
+			mqnaSeq = #{mqnaSeq}
+			and
+			mSeq = #{mSeq}
+	</update>
+	
+	<delete id="delete" parameterType="memberqna">
+		delete 
+			from memberqna
+		where 
+			mSeq = #{mSeq}
+			and
+			mqnaSeq = #{mqnaSeq}
+	</delete>
+	
+	<select id="getMyTotal" resultType="int" parameterType="map">
+		select count(*) from (select mq.* from memberqna mq, member m where mq.mSeq = m.mSeq
+		<if test="type != null">
+			<if test="type == 'boardSeq'">
+				and boardSeq = #{word}
+			</if>
+			<if test="type != 'boardSeq'">
+				and ${type} like '%${word}%'
+			</if>
+		</if>
+		) t where t.mSeq = #{mSeq}
+	</select>
+	
+</mapper>

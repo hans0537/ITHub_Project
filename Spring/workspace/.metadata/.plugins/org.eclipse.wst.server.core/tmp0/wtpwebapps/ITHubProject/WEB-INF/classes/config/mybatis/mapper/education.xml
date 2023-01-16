@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="education"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="education">
+		insert into education values(edu_seq.nextval, #{mSeq}, #{pSeq}, #{eduDegree}, #{eduMajor}, to_date(#{eduStart}, 'YYYY-MM-DD'),
+		to_date(#{eduEnd}, 'YYYY-MM-DD'), #{eduCredit}, '', #{eduContent, jdbcType=CLOB})
+	</insert>
+	
+	<select id="myEdu" resultType="education" parameterType="int">
+		select t.* from (select e.*, p.pName pName from education e, page p where e.pSeq = p.pSeq) t where t.mSeq=#{mSeq}
+	</select>
+	
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<bean id="adminService" class="com.ithub.admin.AdminService">
+		<property name="adminDAO" ref="adminDAO" />
+	</bean>
+	
+<!-- 	<bean id="adminDeptService" class="com.ithub.admindept.AdminDeptService">
+		<property name="adminDeptDAO" ref="adminDeptDAO" />
+	</bean>
+ -->
+	<bean id="memberService" class="com.ithub.member.MemberService">
+		<property name="memberDAO" ref="memberDAO" />
+	</bean>
+
+	<bean id="countryService" class="com.ithub.country.CountryService">
+		<property name="countryDAO" ref="countryDAO"></property>
+	</bean>
+	
+	<bean id="industryService" class="com.ithub.industry.IndustryService">
+		<property name="industryDAO" ref="industryDAO"></property>
+	</bean>
+	
+	<bean id="pagetypeService" class="com.ithub.pagetype.PagetypeService">
+		<property name="pagetypeDAO" ref="pagetypeDAO"></property>
+	</bean>
+	
+	<bean id="pageService" class="com.ithub.page.PageService">
+		<property name="pageDAO" ref="pageDAO"></property>
+	</bean>
+
+	<bean id="memFollowService" class="com.ithub.memfollow.MemFollowService">
+		<property name="memFollowDAO" ref="memFollowDAO"></property>
+	</bean>
+
+	<bean id="pageFollowService" class="com.ithub.pagefollow.PageFollowService">
+		<property name="pageFollowDAO" ref="pageFollowDAO"></property>
+	</bean>
+
+	<bean id="jobPostService" class="com.ithub.jobpost.JobPostService">
+		<property name="jobPostDAO" ref="jobPostDAO"></property>
+	</bean>
+
+	<bean id="empTypeService" class="com.ithub.emptype.EmpTypeService">
+		<property name="empTypeDAO" ref="empTypeDAO"></property>
+	</bean>
+
+	<bean id="workTypeService" class="com.ithub.worktype.WorkTypeService">
+		<property name="workTypeDAO" ref="workTypeDAO"></property>
+	</bean>
+	
+	<bean id="occupationService" class="com.ithub.occupation.OccupationService">
+		<property name="occupationDAO" ref="occupationDAO"></property>
+	</bean>
+	
+	<bean id="positionService" class="com.ithub.position.PositionService">
+		<property name="positionDAO" ref="positionDAO"></property>
+	</bean>
+	
+	<bean id="jobRankService" class="com.ithub.jobrank.JobRankService">
+		<property name="jobRankDAO" ref="jobRankDAO"></property>
+	</bean>
+	
+	<bean id="mtomhitService" class="com.ithub.mtomhit.MtomhitService">
+		<property name="mtomhitDAO" ref="mtomhitDAO"></property>
+	</bean>
+	
+	<bean id="ptomhitService" class="com.ithub.ptomhit.PtomhitService">
+		<property name="ptomhitDAO" ref="ptomhitDAO"></property>
+	</bean>
+	
+	<bean id="boardService" class="com.ithub.board.BoardService">
+		<property name="boardDAO" ref="boardDAO"></property>
+	</bean>
+	
+	<bean id="jpostSaveService" class="com.ithub.jpostsave.JpostSaveService">
+		<property name="jpostSaveDAO" ref="jpostSaveDAO"></property>
+	</bean>
+	
+	<bean id="serviceCenterService" class="com.ithub.servicecenter.ServiceCenterService">
+		<property name="serviceCenterDAO" ref="serviceCenterDAO"></property>
+	</bean>
+	
+	<bean id="serviceCategoryService" class="com.ithub.servicecategory.ServiceCategoryService">
+		<property name="serviceCategoryDAO" ref="serviceCategoryDAO"></property>
+	</bean>
+	
+	<bean id="topicService" class="com.ithub.topic.TopicService">
+		<property name="topicDAO" ref="topicDAO"></property>
+	</bean>
+	
+	<bean id="qnaanswerService" class="com.ithub.qnaanswer.QnaanswerService">
+		<property name="qnaanswerDAO" ref="qnaanswerDAO"></property>
+	</bean>
+	
+	<bean id="memberqnaService" class="com.ithub.memberqna.MemberqnaService">
+		<property name="memberqnaDAO" ref="memberqnaDAO"></property>
+	</bean>
+	
+	<bean id="qnapicService" class="com.ithub.qnapic.QnapicService">
+		<property name="qnapicDAO" ref="qnapicDAO"></property>
+	</bean>
+	
+	<bean id="bcommentService" class="com.ithub.bcomment.BcommentService">
+		<property name="bcommentDAO" ref="bcommentDAO"></property>
+	</bean>
+	
+	<bean id="blikeService" class="com.ithub.blike.BlikeService">
+		<property name="blikeDAO" ref="blikeDAO"></property>
+	</bean>
+	
+	<bean id="careerService" class="com.ithub.career.CareerService">
+		<property name="careerDAO" ref="careerDAO"></property>
+	</bean>
+	
+	<bean id="educationService" class="com.ithub.education.EducationService">
+		<property name="educationDAO" ref="educationDAO"></property>
+	</bean>
+</beans>

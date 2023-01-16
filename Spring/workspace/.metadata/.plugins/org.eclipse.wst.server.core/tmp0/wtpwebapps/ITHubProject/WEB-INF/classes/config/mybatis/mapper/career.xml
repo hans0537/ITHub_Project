@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="career"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="career">
+		insert into career (carSeq, mSeq, pSeq, posSeq, etypeSeq,
+		<if test="carStart != null and carStart != ''">
+		carStart,
+		</if>
+		<if test="carEnd != null and carEnd != ''">
+		carEnd,
+		</if>
+		iSeq, carContent) values(car_seq.nextval,#{mSeq},41,#{posSeq},#{etypeSeq},
+		<if test="carStart != null and carStart != ''">
+		to_date(#{carStart}, 'YYYY-MM-DD'),
+		</if>
+		<if test="carEnd != null and carEnd != ''">
+		to_date(#{carEnd}, 'YYYY-MM-DD'),
+		</if>
+		#{iSeq},#{carContent})
+	</insert>
+	
+	<select id="selectList" resultType="career">
+		select * from career
+	</select>
+	
+	<select id="myCareer" resultType="career" parameterType="int">
+		select s.*, e.etypename from (select c.*, p.posname from career c, position p where c.posSeq=p.posSeq and c.mSeq=#{mSeq}) s, emptype e where s.etypeSeq = e.etypeSeq
+	</select>
+	
+	<delete id="delete" parameterType="career">
+		delete from career where carSeq=#{carSeq}
+	</delete>
+ 
+</mapper>

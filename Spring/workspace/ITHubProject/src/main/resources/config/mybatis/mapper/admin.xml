@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	
+	<insert id="insert" parameterType="member">
+		insert into member values(m_seq.nextval, #{mEmail,jdbcType=VARCHAR}, #{mPw,jdbcType=VARCHAR}, #{mFirstname,jdbcType=VARCHAR}, #{mLastname,jdbcType=VARCHAR}, #{mHp,jdbcType=VARCHAR},null, null, null, null, null, null, #{cSeq}, #{ciSeq})
+	</insert>
+
+	<insert id="qnaAns" parameterType="qnaanswer">
+		insert into qnaanswer values(qanswer_seq.nextval, #{mqnaSeq}, #{adminSeq}, 'asdf', #{qanswerContent,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="selectAdminAll" resultType="admin">
+		select * from admin
+	</select>
+	
+	<select id="checkLogin" resultType = "int" parameterType="admin">
+		select adminSeq from admin where adminId = #{adminId} and adminPw = #{adminPw} 
+	</select>
+
+	<select id="selectOne" parameterType="int" resultType="admin">
+		select * from admin where adminSeq=#{adminSeq}
+	</select>
+
+	<select id="boardmList" resultType="board" parameterType="map">
+		select * from (select rownum rn, t.* from (select b.*, m.mEmail, m.mPic, m.mFirstname, m.mLastname from board b, member m where b.mSeq = m.mSeq 
+			<if test="type != null">
+				<choose>	
+					<when test="type == 'boardSeq'">
+						and boardSeq = #{word}
+					</when>
+					<otherwise>
+						and ${type} like '%${word}%' 
+					</otherwise>
+				</choose>
+			</if>
+			) t where t.mSeq is not null and t.pSeq is null) 
+		<![CDATA[
+			where rn >=#{first} and rn <= #{last} 
+		]]> 
+	</select>
+	
+	<!-- 보드 내에 있는 애들 숫자를 셈(count) -->
+	<select id="boardmTotal" resultType="int" parameterType="map">
+		select count(*) from (select b.* from board b, member m where b.mSeq = m.mSeq
+		<if test="type != null">
+			<if test="type == 'boardSeq'">
+				and boardSeq = #{word}
+			</if>
+			<if test="type != 'boardSeq'">
+				and ${type} like '%${word}%'
+			</if>
+		</if>
+		) t where t.mSeq is not null and t.pSeq is null
+	</select>
+
+	<select id="boardpList" resultType="board" parameterType="map">
+		select * from (select rownum rn, t.* from (select b.*,m.mEmail, m.mPic, m.mFirstname, m.mLastname from board b, member m where b.mSeq = m.mSeq 
+			<if test="type != null">
+				<choose>	
+					<when test="type == 'boardSeq'">
+						and boardSeq = #{word}
+					</when>
+					<otherwise>
+						and ${type} like '%${word}%' 
+					</otherwise>
+				</choose>
+			</if>
+			) t where t.mSeq is not null and t.pSeq is not null) 
+		<![CDATA[
+			where rn >=#{first} and rn <= #{last} 
+		]]> 
+	</select>
+	
+	<!-- 보드 내에 있는 애들 숫자를 셈(count) -->
+	<select id="boardpTotal" resultType="int" parameterType="map">
+		select count(*) from (select b.* from board b, member m where b.mSeq = m.mSeq
+		<if test="type != null">
+			<if test="type == 'boardSeq'">
+				and boardSeq = #{word}
+			</if>
+			<if test="type != 'boardSeq'">
+				and ${type} like '%${word}%'
+			</if>
+		</if>
+		) t where t.mSeq is not null and t.pSeq is not null
+	</select>
+	
+	<select id="deptList" resultType="admindept">
+		select * from admindept
+	</select>
+
+	<delete id="boardDelete" parameterType="int">
+		delete from board where boardSeq = #{boardSeq}
+	</delete>
+
+	<select id="selectMemAll" resultType="member">
+		select * from member
+	</select>
+
+	<select id="selectPageAll" resultType="page">
+		select * from page
+	</select>
+	
+	<select id="pTypeList" parameterType="int" resultType="page">
+		select * from page where pType=#{pType}
+	</select>
+	
+	<delete id="memDelete" parameterType="int" >
+		delete member where mSeq=#{mSeq}
+	</delete>
+	
+	<delete id="pageDelete" parameterType="int" >
+		delete page where pSeq=#{pSeq}
+	</delete>
+	
+	<select id="memQnAList" resultType="memberqna" parameterType="map">
+		select * from (select rownum rn, t.* from (select mq.*, m.mFirstname, m.mLastname, m.mPic, (select scTitle from servicecenter where servicecenter.scSeq = mq.scSeq) scTitle from memberqna mq, member m where mq.mSeq = m.mSeq 
+			<if test="type != null">
+				<choose>	
+					<when test="type == 'boardSeq'">
+						and boardSeq = #{word}
+					</when>
+					<otherwise>
+						and ${type} like '%${word}%' 
+					</otherwise>
+				</choose>
+			</if>
+			) t)
+		<![CDATA[
+			where rn >=#{first} and rn <= #{last} 
+		]]> 
+	</select>
+	
+	<select id="qnaCnt" resultType="int" parameterType="map">
+		select count(*) from (select mq.* from memberqna mq, member m where mq.mSeq = m.mSeq
+		<if test="type != null">
+			<if test="type == 'boardSeq'">
+				and boardSeq = #{word}
+			</if>
+			<if test="type != 'boardSeq'">
+				and ${type} like '%${word}%'
+			</if>
+		</if>
+		) t 
+	</select>
+	
+	<select id="qnaSelect" parameterType="int" resultType="memberqna">
+		select mqnaSeq, mSeq, mqnaTitle, mqnaContent,
+			(select scTitle from servicecenter sc where sc.scSeq = mq.scSeq) scTitle,
+			(select mFirstname from member m where m.mSeq = mq.mSeq) mFirstname,
+			(select mLastname from member m where m.mSeq = mq.mSeq) mLastname,
+			(select mPic from member m where m.mSeq = mq.mSeq) mPic
+		from memberqna mq
+		where mq.mqnaSeq = #{mqnaSeq}
+	</select>
+	
+	<update id="qnaState" parameterType="int">
+		update memberqna set mqnaState = 1 where mqnaSeq = #{mqnaSeq}
+	</update>
+	
+	<delete id="qnaDelete" parameterType="int">
+		delete memberqna where mqnaSeq = #{mqnaSeq}
+	</delete>
+
+</mapper>

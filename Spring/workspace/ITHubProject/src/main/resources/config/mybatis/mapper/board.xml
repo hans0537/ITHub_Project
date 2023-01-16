@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	<!-- #{} : 데이터로 취급, ${} : 글자 자체로 처리 -->
+	
+	<insert id="insert" parameterType="board">
+		insert into board values(board_seq.nextval, #{mSeq}, null, #{boardContent,jdbcType=CLOB}, #{boardFile,jdbcType=VARCHAR}, #{boardFilename,jdbcType=VARCHAR},null,null,null, sysdate, #{boardOpen}, #{boardPossible}, 1)
+	</insert>
+
+	<insert id="pinsert" parameterType="board">
+		insert into board values(board_seq.nextval, #{mSeq}, #{pSeq}, #{boardContent,jdbcType=CLOB}, #{boardFile,jdbcType=VARCHAR}, #{boardFilename,jdbcType=VARCHAR},null,null,null, sysdate, #{boardOpen}, #{boardPossible}, 1)
+	</insert>
+	
+	<select id="selectOne" resultType="board">
+		select b.*, m.mEmail, m.mFirstname, m.mLastname from board b, member m where b.mSeq = m.mSeq and boardSeq = #{boardSeq}
+	</select>
+	
+	<select id="selectList" resultType="board" parameterType="map">
+		select * from (select rownum rn, t.* from (select b.*, m.mEmail, m.mPic, m.mFirstname, m.mLastname from board b, member m where b.mSeq = m.mSeq 
+			<if test="type != null">
+				<choose>	
+					<when test="type == 'boardSeq'">
+						and boardSeq = #{word}
+					</when>
+					<otherwise>
+						and ${type} like '%${word}%' 
+					</otherwise>
+				</choose>
+			</if>
+			) t where t.mSeq = #{mSeq} or 
+			t.pSeq in (select followerpSeq from pagefollow where followmSeq = #{mSeq}) or
+			t.mSeq in (select followerSeq from memfollow m where m.followSeq = #{mSeq}) order by t.boardSeq desc)
+		<![CDATA[
+			where rn >=#{first} and rn <= #{last} 
+		]]> 
+	</select>
+	
+	<!-- 보드 내에 있는 애들 숫자를 셈(count) -->
+	<select id="getTotal" resultType="int" parameterType="map">
+		select count(*) from (select b.* from board b, member m where b.mSeq = m.mSeq
+		<if test="type != null">
+			<if test="type == 'boardSeq'">
+				and boardSeq = #{word}
+			</if>
+			<if test="type != 'boardSeq'">
+				and ${type} like '%${word}%'
+			</if>
+		</if>
+		) t where t.mSeq = #{mSeq} or 
+		t.pSeq in (select followerpSeq from pagefollow where followmSeq = #{mSeq}) or
+		t.mSeq in (select followerSeq from memfollow m where m.followSeq = #{mSeq})
+	</select>
+
+	<!-- 보드 내에 있는 애들 숫자를 셈(count) -->
+	<select id="getMyTotal" resultType="int" parameterType="map">
+		select count(*) from (select b.* from board b, member m where b.mSeq = m.mSeq
+		<if test="type != null">
+			<if test="type == 'boardSeq'">
+				and boardSeq = #{word}
+			</if>
+			<if test="type != 'boardSeq'">
+				and ${type} like '%${word}%'
+			</if>
+		</if>
+		) t where t.mSeq = #{mSeq}
+	</select>
+	
+	<select id="myBoard" resultType="board" parameterType="int">
+		select * from board where mSeq = #{mSeq}
+	</select>
+	
+	<select id="selectBoard" resultType="board" parameterType="int">
+		select * from board where boardSeq = #{boardSeq}
+	</select>
+	
+	<update id="update" parameterType="board">
+		update board set boardContent = #{boardContent,jdbcType=CLOB}, boardOpen=#{boardOpen}, boardPossible=#{boardPossible}, boardFile=#{boardFile,jdbcType=VARCHAR}, boardDate=sysdate where boardSeq = #{boardSeq}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from board where boardSeq = #{boardSeq}
+	</delete>
+
+	<select id="bcCount" resultType="board">
+		select b.boardSeq boardSeq, count(*) bcCount from board b, bcomment bc where b.boardSeq = bc.boardSeq group by b.boardSeq
+	</select>
+	
+	<select id="likeCount" resultType="board">
+		select b.boardSeq boardSeq, count(*) likeCount from board b, blike bl where b.boardSeq = bl.boardSeq group by b.boardSeq
+	</select>
+	
+</mapper>

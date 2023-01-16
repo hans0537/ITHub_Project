@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jpostsave"><!-- SQL 문들을 파일마다 구분할수 있는 이름.... -->
+	<insert id = "insertResume" parameterType="jpostsave">
+		insert into jpostsave values(jpostsave_seq.nextval, #{mSeq},#{jpostSeq},#{fileSave})
+	</insert>
+	
+	<select id="selectOne" parameterType="int" resultType="jpostsave">
+		select * from jpostsave where jpostsaveSeq = #{jpostsaveSeq}
+	</select>
+	
+	<select id="check" parameterType="int" resultType="int">
+		select count(*) from jpostsave where jpostSeq = #{jpostSeq} and mSeq = #{mSeq}
+	</select>
+	
+	<select id="applyList" parameterType="int" resultType="member">
+		select * from member where member.mSeq in (select mSeq from jpostsave where jpostSeq=#{jpostSeq})
+	</select>
+	
+	<update id="resumeUpdate" parameterType="jpostsave">
+		update member set mPic=#{mPic,jdbcType=CHAR} where mSeq=#{mSeq}
+	</update>
+	
+	<select id="myApplies" parameterType="int" resultType="jpostsave">
+		select jpostsaveSeq, jpostSeq,
+    		   (select jpostName from jobpost j where j.jpostSeq = js.jpostSeq) jpostName,
+    		   (select posName from position p where p.posSeq = (select posSeq from jobpost j where j.jpostSeq = js.jpostSeq)) posName,
+    		   (select wtypeName from worktype w where w.wtypeSeq = (select wtypeSeq from jobpost j where j.jpostSeq = js.jpostSeq)) wtypeName,
+    		   (select pName from page p where p.pSeq = (select pSeq from jobpost j where j.jpostSeq = js.jpostSeq)) pName,
+    		   (select pPic from page p where p.pSeq = (select pSeq from jobpost j where j.jpostSeq = js.jpostSeq)) pPic
+ 		from 
+ 				jpostsave js 
+ 		where 
+ 				mSeq = #{mSeq}
+ 				
+	</select>
+	
+	<update id="updateResume" parameterType="jpostsave">
+		update jpostsave set fileSave=#{fileSave} where mSeq=#{mSeq}
+	</update>
+	
+	<delete id="deleteResume" parameterType="int">
+		delete from jpostsave where jpostsaveSeq = #{jpostsaveSeq}
+	</delete>
+	
+	
+</mapper>
